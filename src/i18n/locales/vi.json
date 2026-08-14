@@ -1,0 +1,115 @@
+{
+  "common": {
+    "action": {
+      "cancel": "Huỷ",
+      "retry": "Thử lại",
+      "save": "Lưu",
+      "close": "Đóng",
+      "open_settings": "Mở Cài đặt"
+    },
+    "state": {
+      "loading": "Đang tải…",
+      "error": "Đã có lỗi xảy ra",
+      "empty": "Chưa có dữ liệu",
+      "offline": "Dữ liệu ngoại tuyến"
+    }
+  },
+
+  "tab": {
+    "map": "Bản đồ",
+    "explore": "Khám phá",
+    "favorites": "Yêu thích",
+    "profile": "Cá nhân"
+  },
+
+  "place": {
+    "nearby": {
+      "title": "Quanh đây",
+      "empty": "Không có địa điểm nào trong bán kính {{radius}}km",
+      "empty_hint": "Thử mở rộng bán kính hoặc bỏ bớt bộ lọc",
+      "distance": "{{meters}}m",
+      "distance_km": "{{km}}km"
+    },
+    "detail": {
+      "opening_hours": "Giờ mở cửa",
+      "address": "Địa chỉ",
+      "reviews": "Đánh giá",
+      "visits_one": "{{count}} lượt đến",
+      "visits_other": "{{count}} lượt đến",
+      "no_rating": "Chưa có đánh giá",
+      "open_now": "Đang mở cửa",
+      "closed_now": "Đã đóng cửa",
+      "temporarily_closed": "Tạm đóng cửa"
+    },
+    "type": {
+      "RESTAURANT": "Quán ăn",
+      "STREET_FOOD": "Hàng ăn vỉa hè",
+      "FOOD_MARKET": "Chợ đồ ăn",
+      "CAFE": "Quán cà phê"
+    },
+    "action": {
+      "write_review": "Viết đánh giá",
+      "report_issue": "Báo thông tin sai",
+      "add_favorite": "Yêu thích",
+      "remove_favorite": "Bỏ yêu thích",
+      "check_in": "Đã đến đây"
+    }
+  },
+
+  "permission": {
+    "location": {
+      "title": "Cần quyền vị trí",
+      "message": "FoodMap cần biết vị trí của bạn để tìm quán ăn quanh đây.",
+      "denied": "Bạn đã từ chối quyền vị trí. Có thể tìm theo tên khu vực, hoặc bật lại trong Cài đặt."
+    }
+  },
+
+  "auth": {
+    "login": {
+      "title": "Đăng nhập",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "submit": "Đăng nhập",
+      "forgot_password_link": "Quên mật khẩu?",
+      "register_link": "Chưa có tài khoản? Đăng ký",
+      "failed": "Email hoặc mật khẩu không đúng"
+    },
+    "register": {
+      "title": "Đăng ký",
+      "display_name": "Tên hiển thị",
+      "submit": "Tạo tài khoản"
+    },
+    "guest": {
+      "title": "Bạn đang xem với tư cách khách",
+      "message": "Đăng nhập để lưu quán yêu thích, viết đánh giá và ghi nhận nơi đã đến."
+    }
+  },
+
+  "profile": {
+    "title": "Cá nhân",
+    "my_reviews": "Đánh giá của tôi",
+    "my_visits": "Nơi đã đến",
+    "my_feedbacks": "Góp ý đã gửi",
+    "settings": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "logout": "Đăng xuất"
+  },
+
+  "favorites": {
+    "title": "Yêu thích",
+    "empty": "Chưa có địa điểm yêu thích nào",
+    "empty_hint": "Chạm biểu tượng trái tim ở trang chi tiết quán để lưu lại"
+  },
+
+  "explore": {
+    "title": "Khám phá",
+    "search_placeholder": "Tìm quán, món ăn…",
+    "categories": "Danh mục"
+  },
+
+  "chat": {
+    "title": "Trợ lý FoodMap",
+    "placeholder": "Hỏi về quán ăn quanh đây…",
+    "send": "Gửi"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "common": {
+    "action": {
+      "cancel": "Cancel",
+      "retry": "Try again",
+      "save": "Save",
+      "close": "Close",
+      "open_settings": "Open Settings"
+    },
+    "state": {
+      "loading": "Loading…",
+      "error": "Something went wrong",
+      "empty": "Nothing here yet",
+      "offline": "Offline data"
+    }
+  },
+
+  "tab": {
+    "map": "Map",
+    "explore": "Explore",
+    "favorites": "Saved",
+    "profile": "Profile"
+  },
+
+  "place": {
+    "nearby": {
+      "title": "Nearby",
+      "empty": "No places within {{radius}}km",
+      "empty_hint": "Try a wider radius or remove some filters",
+      "distance": "{{meters}}m",
+      "distance_km": "{{km}}km"
+    },
+    "detail": {
+      "opening_hours": "Opening hours",
+      "address": "Address",
+      "reviews": "Reviews",
+      "visits_one": "{{count}} visit",
+      "visits_other": "{{count}} visits",
+      "no_rating": "No reviews yet",
+      "open_now": "Open now",
+      "closed_now": "Closed",
+      "temporarily_closed": "Temporarily closed"
+    },
+    "type": {
+      "RESTAURANT": "Restaurant",
+      "STREET_FOOD": "Street food",
+      "FOOD_MARKET": "Food market",
+      "CAFE": "Cafe"
+    },
+    "action": {
+      "write_review": "Write a review",
+      "report_issue": "Report an issue",
+      "add_favorite": "Save",
+      "remove_favorite": "Unsave",
+      "check_in": "I've been here"
+    }
+  },
+
+  "permission": {
+    "location": {
+      "title": "Location permission needed",
+      "message": "FoodMap needs your location to find places to eat nearby.",
+      "denied": "Location access was denied. You can search by area name, or re-enable it in Settings."
+    }
+  },
+
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "forgot_password_link": "Forgot password?",
+      "register_link": "No account yet? Sign up",
+      "failed": "Incorrect email or password"
+    },
+    "register": {
+      "title": "Sign up",
+      "display_name": "Display name",
+      "submit": "Create account"
+    },
+    "guest": {
+      "title": "You are browsing as a guest",
+      "message": "Sign in to save places, write reviews, and track where you've been."
+    }
+  },
+
+  "profile": {
+    "title": "Profile",
+    "my_reviews": "My reviews",
+    "my_visits": "Places I've been",
+    "my_feedbacks": "Reports I've sent",
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Sign out"
+  },
+
+  "favorites": {
+    "title": "Saved",
+    "empty": "No saved places yet",
+    "empty_hint": "Tap the heart on a place page to save it"
+  },
+
+  "explore": {
+    "title": "Explore",
+    "search_placeholder": "Search places, dishes…",
+    "categories": "Categories"
+  },
+
+  "chat": {
+    "title": "FoodMap assistant",
+    "placeholder": "Ask about places to eat nearby…",
+    "send": "Send"
+  }
+}

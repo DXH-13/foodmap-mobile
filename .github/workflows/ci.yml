@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Kiểm tra kiểu và lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Cài dependency
+        run: npm ci
+
+      - name: Kiểm tra kiểu
+        # Bắt được cả trường hợp client sinh từ openapi.yaml đã đổi mà chỗ gọi chưa cập nhật
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Kiểm tra key i18n khớp giữa vi và en
+        # Thiếu key ở một ngôn ngữ là lỗi chỉ lộ ra khi người dùng đổi ngôn ngữ —
+        # rất khó phát hiện bằng mắt, nên để CI làm (AC-I18N-03).
+        run: |
+          node --input-type=module -e "
+          import fs from 'node:fs';
+          const flat = (o, p = '') => Object.entries(o).flatMap(([k, v]) =>
+            v && typeof v === 'object' ? flat(v, p + k + '.') : [p + k]);
+          const vi = flat(JSON.parse(fs.readFileSync('src/i18n/locales/vi.json', 'utf8')));
+          const en = flat(JSON.parse(fs.readFileSync('src/i18n/locales/en.json', 'utf8')));
+          const missingEn = vi.filter((k) => !en.includes(k));
+          const missingVi = en.filter((k) => !vi.includes(k));
+          if (missingEn.length || missingVi.length) {
+            if (missingEn.length) console.error('Thieu trong en.json:', missingEn.join(', '));
+            if (missingVi.length) console.error('Thieu trong vi.json:', missingVi.join(', '));
+            process.exit(1);
+          }
+          console.log('OK — ' + vi.length + ' key khop nhau');
+          "
