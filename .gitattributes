@@ -1,0 +1,13 @@
+# Repo được phát triển trên cả macOS và Windows — chuẩn hoá về LF trong kho.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.svg text eol=lf
+
+# File sinh tự động từ docs/03-api/openapi.yaml.
+# Ép LF là bắt buộc: nếu không, checkout trên Windows cho CRLF còn generator ghi LF,
+# khiến file luôn hiện "đã sửa" ngay sau khi vừa sinh lại — và CI kiểm tra
+# "client có khớp hợp đồng không" sẽ báo động giả.
+src/api/generated/** text eol=lf linguist-generated=true -diff
