@@ -6,7 +6,7 @@
 *.ico binary
 *.svg text eol=lf
 
-# File sinh tự động từ docs/03-api/openapi.yaml.
+# File sinh tự động từ docs/SDD/api/openapi.yaml.
 # Ép LF là bắt buộc: nếu không, checkout trên Windows cho CRLF còn generator ghi LF,
 # khiến file luôn hiện "đã sửa" ngay sau khi vừa sinh lại — và CI kiểm tra
 # "client có khớp hợp đồng không" sẽ báo động giả.

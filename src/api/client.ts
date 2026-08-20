@@ -6,7 +6,7 @@ import { getCurrentLocale } from '@/i18n';
 import type { paths } from './generated/schema';
 
 /**
- * Client HTTP duy nhất của app, sinh kiểu từ `docs/03-api/openapi.yaml`.
+ * Client HTTP duy nhất của app, sinh kiểu từ `docs/SDD/api/openapi.yaml`.
  *
  * Đừng gọi `fetch` trần ở nơi khác — mọi endpoint đều có kiểu sẵn ở đây, và mọi
  * thay đổi hợp đồng sẽ báo lỗi biên dịch đúng chỗ bị ảnh hưởng.

@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
  * Khám phá — tìm theo từ khoá và duyệt theo danh mục.
  *
  * TODO(Phase 2): nối vào GET /api/v1/places (tìm không dấu) và
- * GET /api/v1/categories. Xem docs/07-plan/roadmap-v1.md.
+ * GET /api/v1/categories. Xem docs/Management-Plan/lo-trinh-v1.md.
  */
 export default function ExploreScreen() {
     const { t } = useTranslation();

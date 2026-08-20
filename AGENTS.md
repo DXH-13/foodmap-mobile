@@ -53,7 +53,7 @@ Route nằm ở **`src/app`**, không phải `app/` ở gốc (template Expo SDK
 ### 1. Đừng sửa `src/api/generated/`
 
 Bị ghi đè mỗi lần chạy `../scripts/gen-api-client.sh`. Muốn đổi kiểu dữ liệu API thì
-sửa `docs/03-api/openapi.yaml` ở submodule `docs`, rồi sinh lại.
+sửa `docs/SDD/api/openapi.yaml` ở submodule `docs`, rồi sinh lại.
 
 Cũng đừng tự khai lại interface DTO — type đã có sẵn trong `schema.ts`:
 

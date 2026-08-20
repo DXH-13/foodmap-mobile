@@ -49,7 +49,7 @@ Tìm IP: `ipconfig` (Windows) hoặc `ifconfig | grep inet` (macOS).
 
 ## Client API
 
-`src/api/generated/` được **sinh tự động** từ `docs/03-api/openapi.yaml`.
+`src/api/generated/` được **sinh tự động** từ `docs/SDD/api/openapi.yaml`.
 **Đừng sửa tay** — chạy lại generator ở repo cha:
 
 ```bash
@@ -73,5 +73,5 @@ Thêm thư viện native hay đổi quyền thì bắt buộc build và submit l
 
 ## Tài liệu
 
-Yêu cầu và luồng màn hình: `docs/01-srs/srs.md`, `docs/05-ux/screens.md`.
+Yêu cầu và luồng màn hình: `docs/SRS/srs.md`, `docs/SDD/giao-dien/screens.md`.
 Quy ước code: [`AGENTS.md`](./AGENTS.md) và skill `expo-mobile` ở repo cha.
