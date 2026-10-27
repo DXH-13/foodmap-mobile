@@ -945,6 +945,8 @@ export interface components {
             nextOpenAt?: string | null;
             openingHours: components["schemas"]["OpeningHourRange"][];
             images: components["schemas"]["Media"][];
+            /** @description Liên kết sang nền tảng khác (TikTok, Facebook, Instagram…), theo `displayOrder`. Rỗng khi chưa có. */
+            externalLinks: components["schemas"]["PlaceExternalLink"][];
             /** @description Chỉ có mặt khi người gọi đã đăng nhập */
             isFavorited?: boolean | null;
             /** @description Số lượt đến của chính người gọi; chỉ có khi đã đăng nhập */
@@ -973,6 +975,24 @@ export interface components {
             status?: components["schemas"]["PlaceStatus"];
             openingHours?: components["schemas"]["OpeningHourRange"][];
             imageMediaIds?: string[];
+            /** @description Thay toàn bộ danh sách liên kết; thứ tự trong mảng là thứ tự hiển thị. Bỏ trống = giữ nguyên. */
+            externalLinks?: components["schemas"]["PlaceExternalLinkInput"][];
+        };
+        /** @enum {string} */
+        ExternalPlatform: "TIKTOK" | "FACEBOOK" | "INSTAGRAM" | "YOUTUBE" | "OTHER";
+        PlaceExternalLinkInput: {
+            platform: components["schemas"]["ExternalPlatform"];
+            /**
+             * Format: uri
+             * @description Chỉ chấp nhận `https://` — client mở thẳng URL này ra trình duyệt/app ngoài.
+             */
+            url: string;
+            /** @description Nhãn hiển thị, ví dụ tên kênh hoặc tên bài; null thì client hiện tên nền tảng. */
+            title?: string | null;
+        };
+        PlaceExternalLink: components["schemas"]["PlaceExternalLinkInput"] & {
+            /** Format: uuid */
+            id: string;
         };
         /** @enum {string} */
         ReviewStatus: "PENDING" | "APPROVED" | "REJECTED" | "HIDDEN";

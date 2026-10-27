@@ -26,6 +26,8 @@ import { getCurrentLocale } from '@/i18n';
 type PlaceDetail = components['schemas']['PlaceDetail'];
 type Review = components['schemas']['Review'];
 type OpeningHourRange = components['schemas']['OpeningHourRange'];
+type ExternalLink = components['schemas']['PlaceExternalLink'];
+type ExternalPlatform = components['schemas']['ExternalPlatform'];
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
 const HERO_HEIGHT = 260;
@@ -205,6 +207,8 @@ function PlaceHeader({ place }: { place: PlaceDetail }) {
                 ) : null}
 
                 {place.openingHours.length > 0 && <OpeningHours ranges={place.openingHours} />}
+
+                {place.externalLinks.length > 0 && <ExternalLinks links={place.externalLinks} />}
             </View>
 
             <SectionHeader
@@ -425,6 +429,50 @@ function OpeningHours({ ranges }: { ranges: OpeningHourRange[] }) {
     );
 }
 
+/** Tên thương hiệu không dịch; chỉ OTHER cần chuỗi i18n. Nền tảng lạ (enum mới) rơi về OTHER. */
+const PLATFORMS: Record<ExternalPlatform, { icon: IconName; name: string; color: string }> = {
+    TIKTOK: { icon: 'logo-tiktok', name: 'TikTok', color: '#000000' },
+    FACEBOOK: { icon: 'logo-facebook', name: 'Facebook', color: '#1877F2' },
+    INSTAGRAM: { icon: 'logo-instagram', name: 'Instagram', color: '#E1306C' },
+    YOUTUBE: { icon: 'logo-youtube', name: 'YouTube', color: '#FF0000' },
+    OTHER: { icon: 'link', name: '', color: Palette.textSecondary },
+};
+
+/** Liên kết sang bài review trên nền tảng khác. Chỉ mở https — URL do admin nhập. */
+function ExternalLinks({ links }: { links: ExternalLink[] }) {
+    const { t } = useTranslation();
+    return (
+        <View style={styles.card}>
+            <Text style={styles.cardTitle}>{t('place.detail.external_links')}</Text>
+            {links
+                .filter((link) => link.url.startsWith('https://'))
+                .map((link, i) => {
+                    const platform = PLATFORMS[link.platform] ?? PLATFORMS.OTHER;
+                    const name = platform.name || t('place.detail.external_other');
+                    return (
+                        <View key={link.id}>
+                            {i > 0 && <View style={styles.separator} />}
+                            <Pressable
+                                onPress={() => void Linking.openURL(link.url)}
+                                accessibilityRole="link"
+                                accessibilityLabel={link.title ? `${name}: ${link.title}` : name}
+                                style={({ pressed }) => [styles.infoRow, pressed && styles.pressed]}>
+                                <Ionicons name={platform.icon} size={20} color={platform.color} />
+                                <View style={styles.flex}>
+                                    <Text style={styles.body} numberOfLines={1}>
+                                        {link.title ?? name}
+                                    </Text>
+                                    {link.title ? <Text style={styles.linkPlatform}>{name}</Text> : null}
+                                </View>
+                                <Ionicons name="open-outline" size={18} color={Palette.textSecondary} />
+                            </Pressable>
+                        </View>
+                    );
+                })}
+        </View>
+    );
+}
+
 function ReviewItem({ review }: { review: Review }) {
     const { t } = useTranslation();
     const date = new Intl.DateTimeFormat(getCurrentLocale(), { dateStyle: 'medium', timeZone: VN_TIME_ZONE }).format(
@@ -463,6 +511,7 @@ function ReviewItem({ review }: { review: Review }) {
 }
 
 const styles = StyleSheet.create({
+    linkPlatform: { ...Type.footnote, color: Palette.textSecondary },
     screen: { flex: 1, backgroundColor: Palette.surface },
     centered: { justifyContent: 'center' },
     flex: { flex: 1 },

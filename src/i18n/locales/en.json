@@ -52,7 +52,9 @@
       "closed_all_day": "Closed",
       "about": "About",
       "reviews_empty": "No reviews yet",
-      "reviews_empty_hint": "Be the first to share your experience here."
+      "reviews_empty_hint": "Be the first to share your experience here.",
+      "external_links": "More on social media",
+      "external_other": "Other link"
     },
     "type": {
       "RESTAURANT": "Restaurant",

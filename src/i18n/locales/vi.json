@@ -52,7 +52,9 @@
       "closed_all_day": "Nghỉ",
       "about": "Giới thiệu",
       "reviews_empty": "Chưa có đánh giá nào",
-      "reviews_empty_hint": "Hãy là người đầu tiên chia sẻ trải nghiệm ở quán này."
+      "reviews_empty_hint": "Hãy là người đầu tiên chia sẻ trải nghiệm ở quán này.",
+      "external_links": "Xem thêm trên mạng xã hội",
+      "external_other": "Liên kết khác"
     },
     "type": {
       "RESTAURANT": "Quán ăn",
