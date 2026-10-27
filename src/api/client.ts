@@ -42,7 +42,10 @@ const authMiddleware: Middleware = {
         if (response.status === 401) {
             useAuthStore.getState().clearSession();
         }
-        return response;
+        // KHÔNG `return response`: openapi-fetch kiểm tra giá trị trả về bằng
+        // `instanceof Response`, mà trên React Native response của fetch không phải
+        // instance của class Response toàn cục — mọi request sẽ thành lỗi
+        // "onResponse: must return new Response()". Chỉ đọc thì không trả gì.
     },
 };
 

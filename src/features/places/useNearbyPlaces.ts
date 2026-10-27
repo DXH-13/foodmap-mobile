@@ -7,7 +7,15 @@ export type NearbyParams = {
     latitude: number;
     longitude: number;
     radiusMeters: number;
+    /** Lọc theo một danh mục (chip ở tab Khám phá). */
+    categorySlug?: string;
 };
+
+/** TP.HCM — điểm gốc khi chưa có vị trí người dùng. */
+export const DEFAULT_CENTER = { latitude: 10.7769, longitude: 106.7009 } as const;
+
+/** Bán kính mặc định của MAP-03. */
+export const NEARBY_RADIUS_METERS = 2_000;
 
 /**
  * Tìm địa điểm quanh một toạ độ.
@@ -18,7 +26,7 @@ export type NearbyParams = {
 export function useNearbyPlaces(params: NearbyParams | null) {
     return useQuery({
         queryKey: params
-            ? qk.places.nearby(params.latitude, params.longitude, params.radiusMeters)
+            ? qk.places.nearby(params.latitude, params.longitude, params.radiusMeters, params.categorySlug)
             : qk.places.all,
         enabled: params !== null,
         queryFn: async () => {
@@ -28,6 +36,7 @@ export function useNearbyPlaces(params: NearbyParams | null) {
                         latitude: params!.latitude,
                         longitude: params!.longitude,
                         radiusMeters: params!.radiusMeters,
+                        categorySlugs: params!.categorySlug ? [params!.categorySlug] : undefined,
                         size: 50,
                     },
                 },

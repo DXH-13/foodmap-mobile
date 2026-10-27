@@ -226,7 +226,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lấy chi tiết một địa điểm */
+        /**
+         * Lấy chi tiết một địa điểm
+         * @description Trả cả địa điểm `PERMANENTLY_CLOSED` (client hiện nhãn "đã đóng cửa") — người dùng vẫn
+         *     mở được từ danh sách yêu thích. `DRAFT` hoặc đã xoá trả 404.
+         */
         get: operations["getPlaceById"];
         put?: never;
         post?: never;
@@ -305,6 +309,27 @@ export interface paths {
         };
         /** Lấy đánh giá của chính mình */
         get: operations["listOwnReviews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews/feed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bảng tin bài đánh giá
+         * @description Đánh giá `APPROVED` của mọi địa điểm đang hiển thị, mới nhất trước. Dùng cho lưới
+         *     bài viết ở tab Khám phá. Mỗi phần tử có `place` để hiện tên quán trên thẻ.
+         */
+        get: operations["listReviewFeed"];
         put?: never;
         post?: never;
         delete?: never;
@@ -970,10 +995,23 @@ export interface components {
             /** @description Chỉ trả về cho tác giả và cho moderator */
             moderationNote?: string | null;
             media: components["schemas"]["Media"][];
+            /**
+             * @description Địa điểm được đánh giá, rút gọn. Có ở bảng tin và ở `GET /me/reviews` — nơi
+             *     danh sách trộn nhiều địa điểm. Không có ở `GET /places/{placeId}/reviews`.
+             */
+            place?: components["schemas"]["ReviewPlace"] | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
             updatedAt?: string | null;
+        };
+        ReviewPlace: {
+            /** Format: uuid */
+            id: string;
+            /** @description Đã dịch; thiếu bản `en` thì trả bản `vi` */
+            name: string;
+            placeType: components["schemas"]["PlaceType"];
+            coverImageUrl?: string | null;
         };
         SubmitReviewRequest: {
             rating: number;
@@ -1551,6 +1589,12 @@ export interface operations {
                 query?: string;
                 placeType?: components["schemas"]["PlaceType"];
                 categorySlugs?: string[];
+                /**
+                 * @description `RELEVANCE` — khớp tên trước, rồi khớp mô tả; không có `query` thì theo tên.
+                 *     `POPULAR` — `averageRating` giảm dần (null xếp cuối), rồi `reviewCount` giảm dần
+                 *     (DISCOVERY-03).
+                 */
+                sort?: "RELEVANCE" | "POPULAR";
                 /** @description Số trang, bắt đầu từ 0 */
                 page?: components["parameters"]["PageParam"];
                 /** @description Số phần tử mỗi trang */
@@ -1767,6 +1811,31 @@ export interface operations {
                 };
             };
             401: components["responses"]["Unauthorized"];
+        };
+    };
+    listReviewFeed: {
+        parameters: {
+            query?: {
+                /** @description Số trang, bắt đầu từ 0 */
+                page?: components["parameters"]["PageParam"];
+                /** @description Số phần tử mỗi trang */
+                size?: components["parameters"]["SizeParam"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Một trang bài đánh giá */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageOfReview"];
+                };
+            };
         };
     };
     submitFeedback: {

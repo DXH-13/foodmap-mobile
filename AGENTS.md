@@ -11,7 +11,7 @@ Quy ước đầy đủ nằm ở repo cha: skill `expo-mobile`, `foodmap-domain
 
 ```bash
 npm install
-npx expo start          # quét mã QR bằng Expo Go
+npx expo run:android    # development build — KHÔNG dùng Expo Go được (MapLibre là native module)
 npm run typecheck
 npm run lint
 ```
@@ -20,7 +20,7 @@ npm run lint
 `localhost` — thiết bị thật và máy ảo Android không hiểu localhost của máy bạn.
 Xem `.env.example`.
 
-**Bản web không chạy được màn hình Bản đồ** — `react-native-maps` không hỗ trợ web.
+**Bản web không chạy được màn hình Bản đồ** — MapLibre không hỗ trợ web.
 Các màn hình khác thì được.
 
 ---
@@ -67,13 +67,21 @@ type PlaceSummary = components['schemas']['PlaceSummary'];
 Lỗi phổ biến nhất khi chạy trên thiết bị thật. Dùng IP LAN
 (`ipconfig` / `ifconfig | grep inet`), hoặc `10.0.2.2` cho emulator Android.
 
-### 3. Bản đồ: chỉ gọi API khi bản đồ NGỪNG di chuyển
+### 3. Bản đồ: danh sách quán bám theo VỊ TRÍ, không theo vùng đang xem
 
-Dùng `onRegionChangeComplete`, không phải `onRegionChange`. Gọi theo từng frame kéo
-bản đồ sẽ spam server. Bán kính suy từ `latitudeDelta`, kẹp trong 100–50.000m —
-vượt giới hạn thì backend trả 400 `RADIUS_OUT_OF_RANGE`, **không** tự cắt bớt.
+`/places/nearby` gọi theo GPS (hoặc TP.HCM khi chưa có vị trí), bán kính cố định 2 km
+(MAP-03). Kéo bản đồ **không** tải lại danh sách — đây là quyết định sản phẩm, đừng thêm
+lại `onRegionDidChange` để gọi API. Bán kính backend chấp nhận 100–50.000m; vượt thì trả
+400 `RADIUS_OUT_OF_RANGE`, **không** tự cắt bớt.
 
-Dùng `provider={PROVIDER_GOOGLE}` trên **cả hai** nền tảng; mặc định của iOS là Apple Maps.
+Thanh tab là capsule kính **nổi** (`src/components/glass-tab-bar.tsx`), không chiếm chỗ
+trong layout. Nội dung sát đáy màn hình phải đẩy lên bằng `useTabBarInset()`. Nền kính dùng
+`GlassSurface`: Liquid Glass thật trên iOS 26+, kính mờ giả lập trên Android.
+
+Bản đồ là MapLibre + OpenFreeMap (ADR-0005), không cần khoá. Giữ `androidView="texture"`:
+SurfaceView mặc định "đục lỗ" cửa sổ, để lại dải đen dưới thanh tab ở các tab khác. Toạ độ trong MapLibre là
+`[kinh độ, vĩ độ]` — ngược thứ tự với `{ latitude, longitude }` của API. Không tắt
+`attribution` — giấy phép OpenStreetMap bắt buộc ghi công.
 
 ### 4. `averageRating` có thể là `null`
 

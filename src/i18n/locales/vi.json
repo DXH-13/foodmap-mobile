@@ -5,23 +5,27 @@
       "retry": "Thử lại",
       "save": "Lưu",
       "close": "Đóng",
-      "open_settings": "Mở Cài đặt"
+      "open_settings": "Mở Cài đặt",
+      "clear": "Xoá",
+      "see_all": "Xem tất cả",
+      "back": "Quay lại",
+      "show_password": "Hiện mật khẩu",
+      "hide_password": "Ẩn mật khẩu"
     },
     "state": {
       "loading": "Đang tải…",
       "error": "Đã có lỗi xảy ra",
       "empty": "Chưa có dữ liệu",
-      "offline": "Dữ liệu ngoại tuyến"
+      "offline": "Dữ liệu ngoại tuyến",
+      "error_hint": "Kiểm tra kết nối mạng rồi thử lại."
     }
   },
-
   "tab": {
     "map": "Bản đồ",
     "explore": "Khám phá",
     "favorites": "Yêu thích",
-    "profile": "Cá nhân"
+    "profile": "Hồ sơ"
   },
-
   "place": {
     "nearby": {
       "title": "Quanh đây",
@@ -39,7 +43,16 @@
       "no_rating": "Chưa có đánh giá",
       "open_now": "Đang mở cửa",
       "closed_now": "Đã đóng cửa",
-      "temporarily_closed": "Tạm đóng cửa"
+      "temporarily_closed": "Tạm đóng cửa",
+      "permanently_closed": "Đã đóng cửa hẳn",
+      "not_found": "Không tìm thấy địa điểm",
+      "not_found_hint": "Địa điểm này có thể đã bị gỡ hoặc đường dẫn không đúng.",
+      "own_visits_one": "Bạn đã đến {{count}} lần",
+      "own_visits_other": "Bạn đã đến {{count}} lần",
+      "closed_all_day": "Nghỉ",
+      "about": "Giới thiệu",
+      "reviews_empty": "Chưa có đánh giá nào",
+      "reviews_empty_hint": "Hãy là người đầu tiên chia sẻ trải nghiệm ở quán này."
     },
     "type": {
       "RESTAURANT": "Quán ăn",
@@ -52,18 +65,24 @@
       "report_issue": "Báo thông tin sai",
       "add_favorite": "Yêu thích",
       "remove_favorite": "Bỏ yêu thích",
-      "check_in": "Đã đến đây"
+      "check_in": "Đã đến đây",
+      "directions": "Chỉ đường"
+    },
+    "visit": {
+      "permission_message": "FoodMap cần vị trí hiện tại để xác nhận bạn đang ở quán (trong vòng 200m).",
+      "success": "Đã ghi nhận lượt đến hôm nay",
+      "failed": "Không ghi nhận được lượt đến. Vui lòng thử lại.",
+      "location_unavailable": "Không lấy được vị trí hiện tại. Hãy bật GPS rồi thử lại."
     }
   },
-
   "permission": {
     "location": {
       "title": "Cần quyền vị trí",
       "message": "FoodMap cần biết vị trí của bạn để tìm quán ăn quanh đây.",
-      "denied": "Bạn đã từ chối quyền vị trí. Có thể tìm theo tên khu vực, hoặc bật lại trong Cài đặt."
+      "denied": "Bạn đã từ chối quyền vị trí. Có thể tìm theo tên khu vực, hoặc bật lại trong Cài đặt.",
+      "denied_short": "Chưa có quyền vị trí — đang xem quanh TP.HCM."
     }
   },
-
   "auth": {
     "login": {
       "title": "Đăng nhập",
@@ -72,44 +91,132 @@
       "submit": "Đăng nhập",
       "forgot_password_link": "Quên mật khẩu?",
       "register_link": "Chưa có tài khoản? Đăng ký",
-      "failed": "Email hoặc mật khẩu không đúng"
+      "failed": "Email hoặc mật khẩu không đúng",
+      "subtitle": "Lưu quán yêu thích, viết đánh giá và ghi lại nơi đã đến.",
+      "invalid_email": "Email không hợp lệ",
+      "invalid_password": "Mật khẩu tối thiểu 8 ký tự"
     },
     "register": {
       "title": "Đăng ký",
       "display_name": "Tên hiển thị",
-      "submit": "Tạo tài khoản"
+      "submit": "Tạo tài khoản",
+      "subtitle": "Chỉ mất một phút để bắt đầu lưu và chia sẻ quán ngon.",
+      "invalid_display_name": "Nhập tên hiển thị (tối đa 50 ký tự)",
+      "password_rule": "Mật khẩu tối thiểu 8 ký tự, có cả chữ và số",
+      "failed": "Không tạo được tài khoản. Vui lòng thử lại.",
+      "login_link": "Đã có tài khoản? Đăng nhập"
     },
-    "guest": {
-      "title": "Bạn đang xem với tư cách khách",
-      "message": "Đăng nhập để lưu quán yêu thích, viết đánh giá và ghi nhận nơi đã đến."
+    "welcome": {
+      "title": "FoodMap",
+      "tagline": "Bản đồ quán ngon, hàng rong và chợ ẩm thực khắp Việt Nam.",
+      "create_account": "Tạo tài khoản"
     }
   },
-
   "profile": {
-    "title": "Cá nhân",
+    "title": "Hồ sơ",
     "my_reviews": "Đánh giá của tôi",
     "my_visits": "Nơi đã đến",
     "my_feedbacks": "Góp ý đã gửi",
     "settings": "Cài đặt",
     "language": "Ngôn ngữ",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "segment": {
+      "posts": "Bài viết",
+      "visits": "Đã đến"
+    },
+    "stats": {
+      "posts": "Bài viết",
+      "favorites": "Yêu thích",
+      "visits": "Đã đến"
+    },
+    "posts_empty": "Bạn chưa viết bài nào",
+    "posts_empty_hint": "Viết đánh giá ở trang chi tiết quán để chia sẻ trải nghiệm.",
+    "visits_empty": "Chưa ghi nhận nơi nào",
+    "visits_empty_hint": "Bấm “Đã đến đây” khi bạn đang ở quán.",
+    "verified": "Đã xác minh",
+    "unverified": "Chưa xác minh",
+    "role": {
+      "USER": "Người dùng",
+      "MODERATOR": "Kiểm duyệt viên",
+      "ADMIN": "Quản trị viên"
+    },
+    "unknown_place": "Địa điểm",
+    "logout_confirm_title": "Đăng xuất?",
+    "logout_confirm_message": "Bạn sẽ cần đăng nhập lại để lưu quán và viết đánh giá.",
+    "about": "Giới thiệu",
+    "version": "Phiên bản",
+    "locale_name": {
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
   },
-
   "favorites": {
     "title": "Yêu thích",
     "empty": "Chưa có địa điểm yêu thích nào",
-    "empty_hint": "Chạm biểu tượng trái tim ở trang chi tiết quán để lưu lại"
+    "empty_hint": "Chạm biểu tượng trái tim ở trang chi tiết quán để lưu lại",
+    "explore_action": "Khám phá quán"
   },
-
   "explore": {
     "title": "Khám phá",
     "search_placeholder": "Tìm quán, món ăn…",
-    "categories": "Danh mục"
+    "categories": "Danh mục",
+    "all": "Tất cả",
+    "nearby": "Gần bạn",
+    "popular": "Phổ biến",
+    "feed": "Bài viết mới",
+    "nearby_empty": "Chưa có quán nào quanh đây.",
+    "popular_empty": "Chưa có quán nào trong mục này.",
+    "feed_empty": "Chưa có bài viết nào",
+    "feed_empty_hint": "Bài đánh giá được duyệt sẽ hiện ở đây."
   },
-
   "chat": {
     "title": "Trợ lý FoodMap",
     "placeholder": "Hỏi về quán ăn quanh đây…",
     "send": "Gửi"
+  },
+  "review": {
+    "rating_label_one": "{{count}} sao",
+    "rating_label_other": "{{count}} sao",
+    "status": {
+      "PENDING": "Đang chờ duyệt",
+      "REJECTED": "Bị từ chối",
+      "HIDDEN": "Đã ẩn",
+      "APPROVED": "Đã duyệt"
+    }
+  },
+  "map": {
+    "my_location": "Về vị trí của tôi",
+    "nearby_error": "Không tải được quán quanh đây",
+    "search": {
+      "placeholder": "Tìm phở, bún, khu vực…",
+      "searching": "Đang tìm…",
+      "error": "Không tìm được lúc này",
+      "empty": "Không thấy quán nào cho “{{query}}”",
+      "empty_hint": "Thử từ khoá khác, ví dụ tên món hoặc tên quán.",
+      "results_one": "{{count}} kết quả",
+      "results_other": "{{count}} kết quả"
+    }
+  },
+  "onboarding": {
+    "skip": "Bỏ qua",
+    "next": "Tiếp",
+    "start": "Bắt đầu khám phá",
+    "progress": "Bước {{current}}/{{total}}",
+    "map": {
+      "title": "Tìm quán quanh bạn",
+      "body": "Bản đồ hiện quán ăn, hàng rong và chợ quanh vị trí của bạn. Gõ tên món để tìm ở bất cứ đâu."
+    },
+    "explore": {
+      "title": "Khám phá theo món",
+      "body": "Lọc theo phở, bún, bánh mì… và đọc bài đánh giá thật từ cộng đồng."
+    },
+    "favorites": {
+      "title": "Lưu quán yêu thích",
+      "body": "Chạm trái tim ở trang quán để lưu lại, xem lại trong tab Yêu thích."
+    },
+    "profile": {
+      "title": "Ghi lại hành trình ăn uống",
+      "body": "Đánh dấu nơi đã đến, viết đánh giá kèm ảnh và theo dõi tất cả trong Hồ sơ."
+    }
   }
 }

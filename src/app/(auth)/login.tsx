@@ -3,11 +3,13 @@ import { useMutation } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
 
 import { api, errorMessageOf } from '@/api/client';
-import { useAuthStore } from '@/store/auth';
+import { Button } from '@/components/button';
+import { Field, FieldGroup } from '@/components/text-field';
+import { AuthLink, AuthScaffold } from '@/features/auth/auth-scaffold';
+import { useStartSession } from '@/features/auth/useStartSession';
 
 /**
  * Validation phía client chỉ để UX — backend luôn kiểm tra lại.
@@ -22,7 +24,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginScreen() {
     const { t } = useTranslation();
-    const setSession = useAuthStore((state) => state.setSession);
+    const startSession = useStartSession();
 
     const {
         control,
@@ -36,99 +38,70 @@ export default function LoginScreen() {
     const login = useMutation({
         mutationFn: async (form: LoginForm) => {
             const { data, error } = await api.POST('/api/v1/auth/login', { body: form });
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
             return data;
         },
-        onSuccess: async (tokens) => {
-            await setSession(tokens.accessToken, tokens.refreshToken, tokens.user);
-            // Quay lại đúng chỗ người dùng đang dở, không đẩy về màn hình chính.
-            if (router.canGoBack()) {
-                router.back();
-            } else {
-                router.replace('/');
-            }
-        },
+        onSuccess: startSession,
     });
 
+    const submit = handleSubmit((form) => login.mutate(form));
+
+    const error = errors.email
+        ? t('auth.login.invalid_email')
+        : errors.password
+          ? t('auth.login.invalid_password')
+          : login.isError
+            ? errorMessageOf(login.error, t('auth.login.failed'))
+            : null;
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>{t('auth.login.title')}</Text>
-
-            <Controller
-                control={control}
-                name="email"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={[styles.input, errors.email && styles.inputError]}
-                        placeholder={t('auth.login.email')}
-                        autoCapitalize="none"
-                        autoComplete="email"
-                        keyboardType="email-address"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                    />
-                )}
-            />
-
-            <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={[styles.input, errors.password && styles.inputError]}
-                        placeholder={t('auth.login.password')}
-                        secureTextEntry
-                        autoComplete="current-password"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                    />
-                )}
-            />
-
-            {login.isError && (
-                <Text style={styles.error}>
-                    {errorMessageOf(login.error, t('auth.login.failed'))}
-                </Text>
-            )}
-
-            <Pressable
-                style={[styles.button, login.isPending && styles.buttonDisabled]}
-                disabled={login.isPending}
-                onPress={handleSubmit((form) => login.mutate(form))}>
-                {login.isPending ? (
-                    <ActivityIndicator color="#fff" />
-                ) : (
-                    <Text style={styles.buttonLabel}>{t('auth.login.submit')}</Text>
-                )}
-            </Pressable>
-        </View>
+        <AuthScaffold
+            title={t('auth.login.title')}
+            subtitle={t('auth.login.subtitle')}
+            error={error}
+            footer={
+                <>
+                    <Button title={t('auth.login.submit')} loading={login.isPending} onPress={submit} />
+                    {/* replace, không push: qua lại giữa hai form không chồng stack. */}
+                    <AuthLink label={t('auth.login.register_link')} onPress={() => router.replace('/(auth)/register')} />
+                </>
+            }>
+            <FieldGroup>
+                <Controller
+                    control={control}
+                    name="email"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Field
+                            invalid={!!errors.email}
+                            placeholder={t('auth.login.email')}
+                            autoCapitalize="none"
+                            autoComplete="email"
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                        />
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="password"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Field
+                            invalid={!!errors.password}
+                            placeholder={t('auth.login.password')}
+                            secureTextEntry
+                            autoComplete="current-password"
+                            textContentType="password"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            onSubmitEditing={submit}
+                        />
+                    )}
+                />
+            </FieldGroup>
+        </AuthScaffold>
     );
 }
-
-const styles = StyleSheet.create({
-    container: { flex: 1, padding: 24, gap: 14, justifyContent: 'center' },
-    title: { fontSize: 26, fontWeight: '700', marginBottom: 8 },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 10,
-        paddingHorizontal: 14,
-        paddingVertical: 12,
-        fontSize: 16,
-    },
-    inputError: { borderColor: '#d33' },
-    error: { color: '#d33', fontSize: 14 },
-    button: {
-        backgroundColor: '#208AEF',
-        borderRadius: 10,
-        paddingVertical: 14,
-        alignItems: 'center',
-        marginTop: 6,
-    },
-    buttonDisabled: { opacity: 0.6 },
-    buttonLabel: { color: '#fff', fontSize: 16, fontWeight: '600' },
-});

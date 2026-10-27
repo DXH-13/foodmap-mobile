@@ -5,23 +5,27 @@
       "retry": "Try again",
       "save": "Save",
       "close": "Close",
-      "open_settings": "Open Settings"
+      "open_settings": "Open Settings",
+      "clear": "Clear",
+      "see_all": "See all",
+      "back": "Back",
+      "show_password": "Show password",
+      "hide_password": "Hide password"
     },
     "state": {
       "loading": "Loading…",
       "error": "Something went wrong",
       "empty": "Nothing here yet",
-      "offline": "Offline data"
+      "offline": "Offline data",
+      "error_hint": "Check your connection and try again."
     }
   },
-
   "tab": {
     "map": "Map",
     "explore": "Explore",
     "favorites": "Saved",
     "profile": "Profile"
   },
-
   "place": {
     "nearby": {
       "title": "Nearby",
@@ -39,7 +43,16 @@
       "no_rating": "No reviews yet",
       "open_now": "Open now",
       "closed_now": "Closed",
-      "temporarily_closed": "Temporarily closed"
+      "temporarily_closed": "Temporarily closed",
+      "permanently_closed": "Permanently closed",
+      "not_found": "Place not found",
+      "not_found_hint": "This place may have been removed, or the link is wrong.",
+      "own_visits_one": "You have been here once",
+      "own_visits_other": "You have been here {{count}} times",
+      "closed_all_day": "Closed",
+      "about": "About",
+      "reviews_empty": "No reviews yet",
+      "reviews_empty_hint": "Be the first to share your experience here."
     },
     "type": {
       "RESTAURANT": "Restaurant",
@@ -52,18 +65,24 @@
       "report_issue": "Report an issue",
       "add_favorite": "Save",
       "remove_favorite": "Unsave",
-      "check_in": "I've been here"
+      "check_in": "I've been here",
+      "directions": "Directions"
+    },
+    "visit": {
+      "permission_message": "FoodMap needs your current location to confirm you are at the place (within 200m).",
+      "success": "Visit recorded for today",
+      "failed": "Could not record your visit. Please try again.",
+      "location_unavailable": "Could not get your current location. Turn on GPS and try again."
     }
   },
-
   "permission": {
     "location": {
       "title": "Location permission needed",
       "message": "FoodMap needs your location to find places to eat nearby.",
-      "denied": "Location access was denied. You can search by area name, or re-enable it in Settings."
+      "denied": "Location access was denied. You can search by area name, or re-enable it in Settings.",
+      "denied_short": "No location access — showing Ho Chi Minh City."
     }
   },
-
   "auth": {
     "login": {
       "title": "Sign in",
@@ -72,19 +91,27 @@
       "submit": "Sign in",
       "forgot_password_link": "Forgot password?",
       "register_link": "No account yet? Sign up",
-      "failed": "Incorrect email or password"
+      "failed": "Incorrect email or password",
+      "subtitle": "Save places, write reviews, and keep track of where you've been.",
+      "invalid_email": "Enter a valid email",
+      "invalid_password": "Password must be at least 8 characters"
     },
     "register": {
       "title": "Sign up",
       "display_name": "Display name",
-      "submit": "Create account"
+      "submit": "Create account",
+      "subtitle": "It takes a minute to start saving and sharing great places.",
+      "invalid_display_name": "Enter a display name (up to 50 characters)",
+      "password_rule": "Password needs at least 8 characters, with letters and numbers",
+      "failed": "Couldn't create your account. Please try again.",
+      "login_link": "Already have an account? Sign in"
     },
-    "guest": {
-      "title": "You are browsing as a guest",
-      "message": "Sign in to save places, write reviews, and track where you've been."
+    "welcome": {
+      "title": "FoodMap",
+      "tagline": "A map of great restaurants, street food, and food markets across Vietnam.",
+      "create_account": "Create account"
     }
   },
-
   "profile": {
     "title": "Profile",
     "my_reviews": "My reviews",
@@ -92,24 +119,104 @@
     "my_feedbacks": "Reports I've sent",
     "settings": "Settings",
     "language": "Language",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "segment": {
+      "posts": "Posts",
+      "visits": "Visited"
+    },
+    "stats": {
+      "posts": "Posts",
+      "favorites": "Saved",
+      "visits": "Visited"
+    },
+    "posts_empty": "You haven't posted yet",
+    "posts_empty_hint": "Write a review on a place page to share your experience.",
+    "visits_empty": "No visits yet",
+    "visits_empty_hint": "Tap “I've been here” while you're at a place.",
+    "verified": "Verified",
+    "unverified": "Not verified",
+    "role": {
+      "USER": "User",
+      "MODERATOR": "Moderator",
+      "ADMIN": "Admin"
+    },
+    "unknown_place": "Place",
+    "logout_confirm_title": "Sign out?",
+    "logout_confirm_message": "You'll need to sign in again to save places and write reviews.",
+    "about": "About",
+    "version": "Version",
+    "locale_name": {
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
   },
-
   "favorites": {
     "title": "Saved",
     "empty": "No saved places yet",
-    "empty_hint": "Tap the heart on a place page to save it"
+    "empty_hint": "Tap the heart on a place page to save it",
+    "explore_action": "Explore places"
   },
-
   "explore": {
     "title": "Explore",
     "search_placeholder": "Search places, dishes…",
-    "categories": "Categories"
+    "categories": "Categories",
+    "all": "All",
+    "nearby": "Near you",
+    "popular": "Popular",
+    "feed": "Latest posts",
+    "nearby_empty": "No places nearby yet.",
+    "popular_empty": "No places in this category yet.",
+    "feed_empty": "No posts yet",
+    "feed_empty_hint": "Approved reviews will show up here."
   },
-
   "chat": {
     "title": "FoodMap assistant",
     "placeholder": "Ask about places to eat nearby…",
     "send": "Send"
+  },
+  "review": {
+    "rating_label_one": "{{count}} star",
+    "rating_label_other": "{{count}} stars",
+    "status": {
+      "PENDING": "Pending review",
+      "REJECTED": "Rejected",
+      "HIDDEN": "Hidden",
+      "APPROVED": "Approved"
+    }
+  },
+  "map": {
+    "my_location": "Go to my location",
+    "nearby_error": "Couldn't load places nearby",
+    "search": {
+      "placeholder": "Search pho, bun, areas…",
+      "searching": "Searching…",
+      "error": "Search isn't available right now",
+      "empty": "No places found for “{{query}}”",
+      "empty_hint": "Try another keyword, like a dish or a place name.",
+      "results_one": "{{count}} result",
+      "results_other": "{{count}} results"
+    }
+  },
+  "onboarding": {
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Start exploring",
+    "progress": "Step {{current}} of {{total}}",
+    "map": {
+      "title": "Find places around you",
+      "body": "The map shows restaurants, street food, and markets near you. Type a dish to search anywhere."
+    },
+    "explore": {
+      "title": "Explore by dish",
+      "body": "Filter by pho, bun, banh mi… and read real reviews from the community."
+    },
+    "favorites": {
+      "title": "Save the places you love",
+      "body": "Tap the heart on a place page to save it, then find it in the Saved tab."
+    },
+    "profile": {
+      "title": "Track your food journey",
+      "body": "Mark where you've been, write reviews with photos, and see it all in your Profile."
+    }
   }
 }

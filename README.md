@@ -58,9 +58,10 @@ cd .. && ./scripts/gen-api-client.sh
 
 ## Giới hạn đã biết
 
-- **Bản web không chạy màn hình Bản đồ.** `react-native-maps` không hỗ trợ web.
+- **Bản web không chạy màn hình Bản đồ.** MapLibre không hỗ trợ web.
   Dùng `npm run web` để xem nhanh các màn hình khác, nhưng đích đến là iOS và Android.
-- Cần khoá Google Maps thật (`EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`) thì bản đồ mới hiện tile.
+- **Không chạy trong Expo Go** vì MapLibre là native module. Dùng `npx expo run:android`
+  (development build) hoặc build APK. Bản đồ không cần khoá API — xem ADR-0005.
 
 ## Build
 

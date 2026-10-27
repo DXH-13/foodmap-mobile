@@ -1,49 +1,82 @@
-import { Link } from 'expo-router';
+import { FlashList } from '@shopify/flash-list';
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useIsSignedIn } from '@/store/auth';
+import { useTabBarInset } from '@/components/glass-tab-bar';
+import { LargeTitle, StatusBarScrim } from '@/components/large-title';
+import { PlaceRow } from '@/components/place-row';
+import { EmptyState, ErrorState, LoadingState } from '@/components/state-view';
+import { Palette, Radius, Space } from '@/constants/theme';
+import { useFavorites } from '@/features/me/useMeQueries';
 
-/**
- * Danh sách yêu thích.
- *
- * TODO(Phase 3): nối vào GET /api/v1/me/favorites.
- */
+/** Danh sách quán đã lưu (yêu thích). */
 export default function FavoritesScreen() {
     const { t } = useTranslation();
     const insets = useSafeAreaInsets();
-    const isSignedIn = useIsSignedIn();
+    const tabBarInset = useTabBarInset();
+    const favorites = useFavorites();
 
-    if (!isSignedIn) {
-        return (
-            <View style={[styles.centered, { paddingTop: insets.top }]}>
-                <Text style={styles.title}>{t('auth.guest.title')}</Text>
-                <Text style={styles.body}>{t('auth.guest.message')}</Text>
-                <Link href="/(auth)/login" asChild>
-                    <Pressable style={styles.button}>
-                        <Text style={styles.buttonLabel}>{t('auth.login.submit')}</Text>
-                    </Pressable>
-                </Link>
-            </View>
+    const places = favorites.data?.pages.flatMap((p) => p.content) ?? [];
+
+    let empty;
+    if (favorites.isPending) {
+        empty = <LoadingState />;
+    } else if (favorites.isError) {
+        empty = <ErrorState onRetry={() => void favorites.refetch()} />;
+    } else {
+        empty = (
+            <EmptyState
+                icon="heart-outline"
+                title={t('favorites.empty')}
+                message={t('favorites.empty_hint')}
+                action={{ label: t('favorites.explore_action'), onPress: () => router.navigate('/explore') }}
+            />
         );
     }
 
     return (
-        <View style={[styles.container, { paddingTop: insets.top + 16 }]}>
-            <Text style={styles.title}>{t('favorites.title')}</Text>
-            <Text style={styles.body}>{t('favorites.empty')}</Text>
-            <Text style={styles.hint}>{t('favorites.empty_hint')}</Text>
+        <View style={styles.screen}>
+            <FlashList
+                data={places}
+                keyExtractor={(p) => p.id}
+                renderItem={({ item }) => (
+                    <View style={styles.card}>
+                        <PlaceRow place={item} onPress={() => router.push(`/place/${item.id}`)} />
+                    </View>
+                )}
+                ItemSeparatorComponent={() => <View style={styles.gap} />}
+                ListHeaderComponent={
+                    <View style={{ paddingTop: insets.top }}>
+                        <LargeTitle title={t('favorites.title')} />
+                    </View>
+                }
+                ListEmptyComponent={<View style={styles.empty}>{empty}</View>}
+                ListFooterComponent={
+                    <View style={{ height: tabBarInset + Space.lg }}>
+                        {favorites.isFetchingNextPage && <ActivityIndicator color={Palette.brand} />}
+                    </View>
+                }
+                onEndReached={() => {
+                    if (favorites.hasNextPage && !favorites.isFetchingNextPage) void favorites.fetchNextPage();
+                }}
+                refreshing={false}
+                onRefresh={() => void favorites.refetch()}
+            />
+            <StatusBarScrim />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, paddingHorizontal: 20, gap: 8 },
-    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 12 },
-    title: { fontSize: 22, fontWeight: '700', textAlign: 'center' },
-    body: { fontSize: 15, opacity: 0.8, textAlign: 'center' },
-    hint: { fontSize: 13, opacity: 0.6 },
-    button: { paddingHorizontal: 20, paddingVertical: 12, borderRadius: 10, backgroundColor: '#208AEF' },
-    buttonLabel: { color: '#fff', fontWeight: '600' },
+    screen: { flex: 1, backgroundColor: Palette.surface },
+    card: {
+        marginHorizontal: Space.lg,
+        borderRadius: Radius.lg,
+        backgroundColor: Palette.card,
+        paddingVertical: Space.xs,
+    },
+    gap: { height: Space.sm },
+    empty: { paddingTop: Space.xxxl * 2 },
 });
