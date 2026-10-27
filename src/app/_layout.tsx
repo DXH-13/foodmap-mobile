@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { Palette } from '@/constants/theme';
 import '@/i18n';
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore, useIsSignedIn } from '@/store/auth';
 import { useOnboardingStore } from '@/store/onboarding';
 
 SplashScreen.preventAutoHideAsync();
@@ -36,6 +36,7 @@ export default function RootLayout() {
     const restoreSession = useAuthStore((state) => state.restoreSession);
     const restoreOnboarding = useOnboardingStore((state) => state.restore);
     const [isReady, setIsReady] = useState(false);
+    const isSignedIn = useIsSignedIn();
 
     useEffect(() => {
         // Đọc token đã lưu TRƯỚC khi hiện giao diện, nếu không màn hình đăng nhập
@@ -56,13 +57,26 @@ export default function RootLayout() {
             <ThemeProvider value={NAV_THEME}>
                 <StatusBar style="dark" />
                 <Stack>
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                    {/* Luồng vào app: chào → đăng ký/đăng nhập → guide tour → tab. Chặn ở (tabs)/_layout. */}
+                    {/* Mọi màn sau đăng nhập. Mất phiên (đăng xuất, 401 → clearSession) thì các màn này bị gỡ
+                        dù đang mở ở đâu (Cài đặt, chi tiết quán…), router tự về màn chào bên dưới. */}
+                    <Stack.Protected guard={isSignedIn}>
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }} />
+                        <Stack.Screen name="place/[id]" options={{ headerShown: false }} />
+                        <Stack.Screen
+                            name="settings"
+                            options={{
+                                headerShown: true,
+                                headerShadowVisible: false,
+                                headerStyle: { backgroundColor: Palette.surface },
+                                headerTintColor: Palette.onSurface,
+                            }}
+                        />
+                    </Stack.Protected>
+                    {/* Luồng vào app: chào → đăng ký/đăng nhập → guide tour (chặn tour ở (tabs)/_layout) → tab. */}
                     <Stack.Screen name="(auth)/welcome" options={{ headerShown: false, animation: 'fade' }} />
                     <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
                     <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
-                    <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false, animation: 'fade' }} />
-                    <Stack.Screen name="place/[id]" options={{ headerShown: false }} />
                 </Stack>
             </ThemeProvider>
         </QueryClientProvider>

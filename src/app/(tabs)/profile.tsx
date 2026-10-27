@@ -1,26 +1,21 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlashList } from '@shopify/flash-list';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { useState, type ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { api } from '@/api/client';
 import type { components } from '@/api/generated/schema';
-import { qk } from '@/api/queryKeys';
 import { Avatar } from '@/components/avatar';
 import { useTabBarInset } from '@/components/glass-tab-bar';
-import { InsetGroup, InsetRow } from '@/components/inset-group';
 import { LargeTitle, StatusBarScrim } from '@/components/large-title';
 import { PostCard } from '@/components/post-card';
 import { SegmentedControl } from '@/components/segmented-control';
 import { EmptyState, ErrorState, LoadingState } from '@/components/state-view';
 import { CardShadow, Palette, Radius, Space, Type } from '@/constants/theme';
 import { useMe, useMeCounts, useOwnReviews, useOwnVisits } from '@/features/me/useMeQueries';
-import { changeLocale, getCurrentLocale, SUPPORTED_LOCALES } from '@/i18n';
+import { getCurrentLocale } from '@/i18n';
 import { useAuthStore } from '@/store/auth';
 
 type Visit = components['schemas']['Visit'];
@@ -39,7 +34,19 @@ export default function ProfileScreen() {
 
     const header = (
         <View style={{ paddingTop: insets.top }}>
-            <LargeTitle title={t('profile.title')} />
+            <LargeTitle
+                title={t('profile.title')}
+                right={
+                    <Pressable
+                        onPress={() => router.push('/settings')}
+                        hitSlop={8}
+                        style={({ pressed }) => [styles.settingsButton, pressed && styles.pressed]}
+                        accessibilityRole="button"
+                        accessibilityLabel={t('profile.settings')}>
+                        <Ionicons name="settings-outline" size={22} color={Palette.onSurface} />
+                    </Pressable>
+                }
+            />
             <View style={styles.signedInHeader}>
                 <ProfileHeader onSelectSegment={setSegment} />
                 <SegmentedControl
@@ -54,11 +61,7 @@ export default function ProfileScreen() {
         </View>
     );
 
-    const footer = (
-        <View style={{ paddingBottom: tabBarInset + Space.lg }}>
-            <Settings />
-        </View>
-    );
+    const footer = <View style={{ height: tabBarInset + Space.lg }} />;
 
     if (segment === 'posts') {
         const items = reviews.data?.pages.flatMap((p) => p.content) ?? [];
@@ -216,77 +219,6 @@ function VisitRow({ visit }: { visit: Visit }) {
     );
 }
 
-/** Cài đặt kiểu inset grouped: Ngôn ngữ, Giới thiệu, Đăng xuất. */
-function Settings() {
-    const { t } = useTranslation();
-    const queryClient = useQueryClient();
-    const refreshToken = useAuthStore((s) => s.refreshToken);
-    const clearSession = useAuthStore((s) => s.clearSession);
-    const current = getCurrentLocale();
-
-    const logout = useMutation({
-        // Thu hồi refresh token ở server; lỗi mạng cũng không giữ người dùng lại — vẫn đăng xuất.
-        mutationFn: async () => {
-            if (refreshToken) await api.POST('/api/v1/auth/logout', { body: { refreshToken } });
-        },
-        onSettled: () => {
-            clearSession();
-            for (const key of [qk.me.profile, qk.reviews.mine, qk.favorites.all, qk.visits.mine]) {
-                queryClient.removeQueries({ queryKey: key });
-            }
-        },
-    });
-
-    const confirmLogout = () =>
-        Alert.alert(t('profile.logout_confirm_title'), t('profile.logout_confirm_message'), [
-            { text: t('common.action.cancel'), style: 'cancel' },
-            { text: t('profile.logout'), style: 'destructive', onPress: () => logout.mutate() },
-        ]);
-
-    const onChangeLocale = async (locale: (typeof SUPPORTED_LOCALES)[number]) => {
-        await changeLocale(locale);
-        // Tên quán, danh mục… được backend dịch theo Accept-Language — tải lại cho đúng ngôn ngữ.
-        void queryClient.invalidateQueries();
-    };
-
-    return (
-        <View style={styles.settings}>
-            <InsetGroup header={t('profile.language')}>
-                {SUPPORTED_LOCALES.map((locale) => (
-                    <InsetRow
-                        key={locale}
-                        icon="language"
-                        iconColor={locale === 'vi' ? '#E2725B' : '#5B8DEF'}
-                        label={t(`profile.locale_name.${locale}`)}
-                        checked={current === locale}
-                        onPress={() => void onChangeLocale(locale)}
-                    />
-                ))}
-            </InsetGroup>
-
-            <InsetGroup header={t('profile.about')}>
-                <InsetRow
-                    icon="information-circle"
-                    iconColor="#8E8E93"
-                    label={t('profile.version')}
-                    value={Constants.expoConfig?.version ?? '–'}
-                />
-            </InsetGroup>
-
-            <InsetGroup>
-                <InsetRow
-                    icon="log-out-outline"
-                    iconColor={Palette.error}
-                    label={t('profile.logout')}
-                    destructive
-                    onPress={confirmLogout}
-                />
-            </InsetGroup>
-            {logout.isPending && <ActivityIndicator color={Palette.brand} />}
-        </View>
-    );
-}
-
 const styles = StyleSheet.create({
     screen: { flex: 1, backgroundColor: Palette.surface },
     signedInHeader: { paddingHorizontal: Space.lg, gap: Space.lg, paddingBottom: Space.lg },
@@ -345,5 +277,13 @@ const styles = StyleSheet.create({
     visitName: { ...Type.headline, color: Palette.onSurface },
     visitDate: { ...Type.footnote, color: Palette.textSecondary },
     visitGap: { height: Space.sm },
-    settings: { gap: Space.xxl, paddingTop: Space.xl },
+    settingsButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: Palette.card,
+        boxShadow: CardShadow,
+    },
 });
